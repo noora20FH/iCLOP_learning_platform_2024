@@ -21,8 +21,8 @@ class AuthController extends Controller
     	$credential = request(['email', 'password']);
     	if ( Auth::attempt( $credential ) ) {
 
-    		if ( Auth::user()->role == "Student" ) {
-    			return redirect('welcome');
+    		if ( Auth::user()->role == "student" ) {
+    			return redirect('dashboard-student');
 
     		} else if ( Auth::user()->role == "teacher" ) {
                 return redirect('dashboard_teacher');
@@ -61,7 +61,7 @@ class AuthController extends Controller
 		$request->session()->regenerateToken();
 		return redirect('/');
 	}
-	Public function redirect() {
+	public function redirect() {
         return Socialite::driver(driver:'google')->redirect();
     }
 	public function googleCallback()

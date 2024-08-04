@@ -264,34 +264,7 @@
                 </div>
             </nav>
             <!-- ------------------------------------------------------------------------------------------ -->
-            <!-- The Modal -->
-            <div class="modal fade" id="myModal">
-                <div class="modal-dialog" style="width: 420px">
-                    <div class="modal-content">
 
-                        <!-- Modal Header -->
-                        <div class="modal-header" style="border-bottom: none">
-                            {{-- <h4 class="modal-title">Modal Title</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body text-center">
-                            <p class="text" style="font-size: 25px; font-weight: 600">Are you sure ?</p>
-                            <p class="text" style="font-size: 18px">Click the enroll button to start<br>your learning!</p>
-                        </div>
-
-                        <!-- Modal footer -->
-                        <div class="modal-footer d-flex justify-content-center" style="border-top: none">
-                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal" style="width: 160px;">Back</button>
-                            <button type="button" class="btn btn-primary" style="margin-left: 10px; width: 160px;" onclick="materialDetailPage()">
-                                <i class="fas fa-key" style="margin-right: 5px;"></i>Enroll Material
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
             <!-- CONTENT -->
             <main class="col-md-9">
                 <div class="content" id="start-learning">
@@ -310,51 +283,49 @@
 
                             <!-- TAB CONTENT -->
                             <div class="tab-content mt-3">
-                                <div class="tab-pane fade show active" id="learning">
+                            <div class="tab-pane fade show active" id="learning">
+                                @foreach($materials as $material)
+
                                     <div class="row">
                                         <div class="col">
-                                            <div class="p-3">A1:Java - Basic UI Java Edition - for Android Studio 3.x</div>
+                                            <div class="p-3">{{ $material->title }}</div>
                                         </div>
                                         <div class="col" style="text-align: right;">
                                             <div class="custom-button-detail">
-                                                <p class="button-text" data-toggle="modal" data-target="#myModal">
-                                                    <i class="fas fa-key" style="margin-right: 5px;"></i> <!-- Ikon kunci -->
+                                                <p class="button-text" data-toggle="modal" data-target="#myModal-{{ $material->id }}">
+                                                    <i class="fas fa-key" style="margin-right: 5px;"></i>
                                                     Material Details
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="p-3">A1:Java - Basic UI Java Edition - for Android Studio 4.x</div>
-                                        </div>
-                                        <div class="col" style="text-align: right;">
-                                            <div class="custom-button-detail">
-                                                <p class="button-text">
-                                                    <i class="fas fa-key" style="margin-right: 5px;"></i> <!-- Ikon kunci -->
-                                                    Material Details
-                                                </p>
-                                            </div>
-                                            {{-- <button class="btn custom-button" style="color: #636363; background-color: #EDEDED;">Material Details</button> --}}
-                                        </div>
-                                    </div>
+                                    <!-- Modal untuk setiap material -->
+                                    <div class="modal fade" id="myModal-{{ $material->id }}">
+                                        <div class="modal-dialog" style="width: 420px">
+                                            <div class="modal-content">
+                                                <!-- Modal Header -->
+                                                <div class="modal-header" style="border-bottom: none">
+                                                </div>
 
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="p-3">A1:Kotlin - Basic UI Kotlin Edition</div>
-                                        </div>
-                                        <div class="col" style="text-align: right;">
-                                            <div class="custom-button-detail">
-                                                <p class="button-text">
-                                                    <i class="fas fa-key" style="margin-right: 5px;"></i> <!-- Ikon kunci -->
-                                                    Material Details
-                                                </p>
+                                                <!-- Modal body -->
+                                                <div class="modal-body text-center">
+                                                    <p class="text" style="font-size: 25px; font-weight: 600">Are you sure ?</p>
+                                                    <p class="text" style="font-size: 18px">Click the enroll button to start<br>your learning!</p>
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer d-flex justify-content-center" style="border-top: none">
+                                                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal" style="width: 160px;">Back</button>
+                                                    <button type="button" class="btn btn-primary" onclick="showMaterialDetail({{ $material->id }})">
+                                                        Enroll Material
+                                                    </button>
+                                                </div>
                                             </div>
-                                            {{-- <button class="btn custom-button" style="color: #636363; background-color: #EDEDED;">Material Details</button> --}}
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
+                            </div>
                                 <div class="tab-pane fade" id="finished">
                                     <h3>Topic Finished</h3>
                                     <p>This is the content for the Topic Finished.</p>
@@ -408,7 +379,12 @@
             </main>
         </div>
     </div>
-
+    <!-- Menanganin klok tombol Enroll Material -->
+    <script>
+        function showMaterialDetail(materialId) {
+            window.location.href = "{{ route('material_detail') }}?material_id=" + materialId;
+        }
+    </script>
     <!-- JavaScript untuk mengubah konten tab -->
     <script>
         function materialDetailPage() {

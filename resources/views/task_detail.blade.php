@@ -9,16 +9,41 @@
     <link href="style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>iCLOP</title>
     <link rel="icon" href="./images/logo.png" type="image/png">
     <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .container-fluid {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .row {
+            flex-grow: 1;
+        }
+        main {
+            overflow-y: auto;
+        }
+
+        /* .footer {
+            flex-shrink: 0;
+        } */
         .text {
             font-family: 'Poppins', sans-serif;
             color: #3F3F46;
         }
+
 
         .text-list {
             font-family: 'Poppins', sans-serif;
@@ -30,7 +55,7 @@
             color: #636363;
             text-align: center;
             padding: 10px 0;
-            position: absolute;
+            position: fixed;
             bottom: 0;
             width: 100%;
         }
@@ -145,12 +170,12 @@
 </head>
 <!-- This is body test -->
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
     <nav class="navbar navbar-light bg-light" style="padding: 15px 20px; border-bottom: 1px solid #E4E4E7; font-family: 'Poppins', sans-serif;">
         <a class="navbar-brand" href="{{ route('learning_student') }}">
-            <img src="images/left-arrow.png" style="height: 24px; margin-right: 10px;">
-            {{ $material->title }}
+        <img src="{{ asset('images/left-arrow.png') }}" style="height: 24px; margin-right: 10px;">
+            {{ $task->task_name }}
         </a>
     </nav>
 
@@ -163,7 +188,7 @@
         <div class="progress-text" id="progressText">0%</div>
         <ul class="list">
             <li class="list-item" onclick="toggleItem(this)">
-                <img class="list-item-icon" src="images/down-arrow.png" style="height: 24px">
+                <img class="list-item-icon" src="{{ asset('images/down-arrow.png') }}" style="height: 24px">
                 <span class="list-item-title">Start to learn Data Analytics with Python</span>
             </li>
             <div class="expandable-content">
@@ -208,33 +233,32 @@
             </div>
 
             <li class="list-item" onclick="toggleItem(this)">
-               <img class="list-item-icon" src="images/down-arrow.png" style="height: 24px">
+                <img class="list-item-icon" src="{{ asset('images/down-arrow.png') }}" style="height: 24px">
                 <span class="list-item-title">Task</span>
             </li>
             <div class="expandable-content">
                 <div style="display: flex; flex-direction: column; align-items: left;">
-                @foreach($material->tasks as $index => $task)
-                <div class="row">
-                    <div class="col-sm-1">
-                        <label class="radio-label">
-                            <input type="radio" name="taskSelection" value="{{ $task->id }}" onchange="goToTaskPage({{ $task->id }})">
-                        </label>
-                    </div>
-                    <div class="col">
-                        <p class="text">Task {{ $index + 1 }}</p>
-                    </div>
-                </div>
-                @endforeach
-                    <script>
-                    function goToTaskPage(taskId) {
-                        window.location.href = "{{ url('/task') }}/" + taskId;
-                    }
-                    </script>
+                    @if($task->material && $task->material->tasks)
+                        @foreach($task->material->tasks as $index => $materialTask)
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <label class="radio-label">
+                                    <input type="radio" name="taskSelection" value="{{ $materialTask->id }}" onchange="goToTaskPage({{ $materialTask->id }})" {{ $materialTask->id == $task->id ? 'checked' : '' }}>
+                                </label>
+                            </div>
+                            <div class="col">
+                                <p class="text">Task {{ $index + 1 }}</p>
+                            </div>
+                        </div>
+                        @endforeach
+                    @else
+                        <p>No tasks available for this material.</p>
+                    @endif
                 </div>
             </div>
 
             <li class="list-item" onclick="toggleItem(this)">
-               <img class="list-item-icon" src="images/down-arrow.png" style="height: 24px">
+               <img class="list-item-icon" src="{{ asset('images/down-arrow.png') }}" style="height: 24px">
                 <span class="list-item-title">Assignment Answer Submission</span>
             </li>
             <div class="expandable-content">
@@ -278,36 +302,59 @@
         </ul>
     </div>
 
-    <div id="taskContent">
-        <!-- Konten task akan ditampilkan di sini -->
-    </div>
-
-    <div style="padding-top: 36px; padding-left: 80px">
-        <p class="text-list" style="font-size: 36px; font-weight: 600">
-            Requirement
-        </p>
-        <p class="text">
-            Student can start learning with preparing a PC to develop Android application.
-            <ol>
-                <li>A PC with minimum 4 GB RAM, 4 GB HDD, 1280 x 800 screen resolution, Microsoft Windows 7/8/10 (32 or 64 bit).</li>
-                <li>Java SDK 1.8 minimum installed.</li>
-                <li>Android Studio 3.5 installed.</li>
-                <li>A web browser.</li>
-                <li>A PDF reader software.</li>
-                <li>Internet Connection.</li>
-            </ol>
-        </p>
-    </div>
     <!-- Content -->
-    <div style="padding-top: 36px; padding-left: 80px">
-        <h1>Tujuan Pembelajaran:</h1>
-        <p>{{ $material->description }}</p>
-        <!-- Tambahkan elemen lain sesuai kebutuhan -->
-    </div>
+    <div class="container-fluid flex-grow-1 d-flex">
+        <div class="row flex-grow-1">
+            <main class="col-md-9 col-lg-10 px-md-4">
+            
+                <div style="padding-top: 36px; padding-left: 80px">
+                    <p class="text-list" style="font-size: 36px; font-weight: 600">
+                        <h1>{{ $task->task_name }}</h1>
+                    </p>
+
+                    @if($task->pdf_path)
+                        <a href="{{ route('task.download-pdf', $task) }}" class="btn btn-primary">Download PDF</a>
+                    @endif
+
+                    @if($task->pdf_path)
+                        <div style="margin-top: 20px;">
+                            <h2>Task PDF</h2>
+                            <embed src="{{ asset('storage/' . $task->pdf_path) }}" type="application/pdf" width="100%" height="600px" />
+                        </div>
+                    @endif
+
+                    <!-- Tampilkan informasi task lainnya -->
+
+                    @if($task->material)
+                        <h3>Related Tasks:</h3>
+                        <ul>
+                        @foreach($task->material->tasks as $relatedTask)
+                            <li>
+                                <a href="{{ route('task.show', $relatedTask->id) }}">{{ $relatedTask->task_name }}</a>
+                            </li>
+                        @endforeach
+                        </ul>
+                    @endif
+                </div>
+
+                
+                <div style="padding-top: 36px; padding-left: 80px">
+                    <h1>Tujuan Pembelajaran:</h1>
+                    <p>{{ $task->id }}</p>
+                    <!-- Tambahkan elemen lain sesuai kebutuhan -->
+                </div>
+            </main>
      <!-- Footer -->
-     <footer class="footer">
-        © 2023 Your Website. All rights reserved.
+     <footer class="footer py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">© 2023 Your Website. All rights reserved.</span>
+        </div>
     </footer>
+    <script>
+    function goToTaskPage(taskId) {
+        window.location.href = "/task/" + taskId;
+    }
+    </script>
 
     <script>
         function toggleSidebar() {
