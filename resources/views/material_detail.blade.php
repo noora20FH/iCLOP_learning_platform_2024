@@ -15,6 +15,25 @@
     <title>iCLOP</title>
     <link rel="icon" href="./images/logo.png" type="image/png">
     <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .container-fluid {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .row {
+            flex-grow: 1;
+        }
+        main {
+            overflow-y: auto;
+            padding-left: 80px;
+        }
         .text {
             font-family: 'Poppins', sans-serif;
             color: #3F3F46;
@@ -30,7 +49,7 @@
             color: #636363;
             text-align: center;
             padding: 10px 0;
-            position: absolute;
+            position: fixed;
             bottom: 0;
             width: 100%;
         }
@@ -221,7 +240,14 @@
                         </label>
                     </div>
                     <div class="col">
-                        <p class="text">Task {{ $index + 1 }}</p>
+                        <p class="text">
+                            @php
+                                $fileName = pathinfo($task->pdf_path, PATHINFO_FILENAME);
+                                $displayName = str_replace('Data_analitik_', '', $fileName);
+                                $displayName = ucfirst(str_replace('_', ' ', $displayName));
+                            @endphp
+                            {{ $displayName }}
+                        </p>
                     </div>
                 </div>
                 @endforeach
@@ -278,32 +304,37 @@
         </ul>
     </div>
 
-    <div id="taskContent">
-        <!-- Konten task akan ditampilkan di sini -->
+    <!-- Content -->
+    <div class="container-fluid flex-grow-1 d-flex">
+        <div class="row flex-grow-1">
+            <main class="col-md-9 col-lg-10 px-md-4">
+            
+                <p class="text-list" style="font-size: 36px; font-weight: 600">
+                    Requirement
+                </p>
+                <p class="text">
+                    Student can start learning with preparing a PC to develop Android application.
+                    <ol>
+                        <li>A PC with minimum 4 GB RAM, 4 GB HDD, 1280 x 800 screen resolution, Microsoft Windows 7/8/10 (32 or 64 bit).</li>
+                        <li>Java SDK 1.8 minimum installed.</li>
+                        <li>Android Studio 3.5 installed.</li>
+                        <li>A web browser.</li>
+                        <li>A PDF reader software.</li>
+                        <li>Internet Connection.</li>
+                    </ol>
+                </p>
+                <div style="padding-top: 36px; margin-right: 200px">
+                    <h1>Tujuan Pembelajaran:</h1>
+                    <p>{{ $material->description }}</p>
+                    <!-- Tambahkan elemen lain sesuai kebutuhan -->
+                </div>
+            </main>
+        </div>
     </div>
 
-    <div style="padding-top: 36px; padding-left: 80px">
-        <p class="text-list" style="font-size: 36px; font-weight: 600">
-            Requirement
-        </p>
-        <p class="text">
-            Student can start learning with preparing a PC to develop Android application.
-            <ol>
-                <li>A PC with minimum 4 GB RAM, 4 GB HDD, 1280 x 800 screen resolution, Microsoft Windows 7/8/10 (32 or 64 bit).</li>
-                <li>Java SDK 1.8 minimum installed.</li>
-                <li>Android Studio 3.5 installed.</li>
-                <li>A web browser.</li>
-                <li>A PDF reader software.</li>
-                <li>Internet Connection.</li>
-            </ol>
-        </p>
-    </div>
+ 
     <!-- Content -->
-    <div style="padding-top: 36px; padding-left: 80px">
-        <h1>Tujuan Pembelajaran:</h1>
-        <p>{{ $material->description }}</p>
-        <!-- Tambahkan elemen lain sesuai kebutuhan -->
-    </div>
+
      <!-- Footer -->
      <footer class="footer">
         © 2023 Your Website. All rights reserved.

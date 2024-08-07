@@ -247,7 +247,14 @@
                                 </label>
                             </div>
                             <div class="col">
-                                <p class="text">Task {{ $index + 1 }}</p>
+                                <p class="text">
+                                    @php
+                                        $fileName = pathinfo($task->pdf_path, PATHINFO_FILENAME);
+                                        $displayName = str_replace('Data_analitik_', '', $fileName);
+                                        $displayName = ucfirst(str_replace('_', ' ', $displayName));
+                                    @endphp
+                                    {{ $displayName }}
+                                </p>
                             </div>
                         </div>
                         @endforeach
@@ -307,7 +314,7 @@
         <div class="row flex-grow-1">
             <main class="col-md-9 col-lg-10 px-md-4">
             
-                <div style="padding-top: 36px; padding-left: 80px">
+                <div style="padding-top: 36px; margin-right: 200px">
                     <p class="text-list" style="font-size: 36px; font-weight: 600">
                         <h1>{{ $task->task_name }}</h1>
                     </p>
@@ -319,7 +326,14 @@
                     @if($task->pdf_path)
                         <div style="margin-top: 20px;">
                             <h2>Task PDF</h2>
-                            <embed src="{{ asset('storage/' . $task->pdf_path) }}" type="application/pdf" width="100%" height="600px" />
+                            @php
+                                $pdfPath = 'pdfs/' . $task->pdf_path;
+                            @endphp
+                            @if(Storage::disk('public')->exists($pdfPath))
+                                <embed src="{{ asset('storage/' . $pdfPath) }}" type="application/pdf" width="100%" height="600px" />
+                            @else
+                                <p>PDF tidak ditemukan. File: {{ $task->pdf_path }}</p>
+                            @endif
                         </div>
                     @endif
 
@@ -330,20 +344,39 @@
                         <ul>
                         @foreach($task->material->tasks as $relatedTask)
                             <li>
-                                <a href="{{ route('task.show', $relatedTask->id) }}">{{ $relatedTask->task_name }}</a>
+                                <a href="{{ route('task.show', $relatedTask->id+1) }}">{{ $relatedTask->task_name }}</a>
                             </li>
                         @endforeach
                         </ul>
                     @endif
+
+                    <div class="container" style="padding-top: 36px; margin-right: 200px; margin-bottom: 80px">
+                        <h1>Task Submission</h1>
+
+                        <form action="{{ route('student.submission.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="task_id" value="{{ $task->id }}">
+                            <div class="form-group">
+                                <label for="answer_file">Upload your Python file:</label>
+                                <input type="file" name="answer_file" id="answer_file" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+
+                        @if(isset($submission))
+                            <h2>Submission Details</h2>
+                            <p>Submission Count: {{ $submission->submission_count }}</p>
+                            <h3>Test Results:</h3>
+                            <pre>{{ $submission->test_result }}</pre>
+                        @endif
+                    </div>
                 </div>
 
                 
-                <div style="padding-top: 36px; padding-left: 80px">
-                    <h1>Tujuan Pembelajaran:</h1>
-                    <p>{{ $task->id }}</p>
-                    <!-- Tambahkan elemen lain sesuai kebutuhan -->
-                </div>
+
             </main>
+        </div>
+    </div>
      <!-- Footer -->
      <footer class="footer py-3 bg-light">
         <div class="container text-center">

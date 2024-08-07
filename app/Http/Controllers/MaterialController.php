@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Material;
+use App\Models\StudentSubmission;
 use Illuminate\Support\Facades\Storage;
 
 class MaterialController extends Controller
@@ -25,8 +26,12 @@ class MaterialController extends Controller
     }
     public function showTask($taskId)
     {
-        $task = Task::with('material')->findOrFail($taskId);
-        return view('task_detail', compact('task'));
+        $task = Task::findOrFail($taskId);
+        $submission = StudentSubmission::where('user_id', auth()->id())
+                                       ->where('task_id', $taskId)
+                                       ->latest()
+                                       ->first();
+        return view('task_detail', compact('task', 'submission'));
     }
     
     public function downloadPdf(Task $task)
