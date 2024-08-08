@@ -31,15 +31,22 @@ class MaterialController extends Controller
                                        ->where('task_id', $taskId)
                                        ->latest()
                                        ->first();
-        return view('task_detail', compact('task', 'submission'));
+
+        $submittedCode = '';
+        if ($submission && $submission->file_path) {
+            $submittedCode = Storage::get($submission->file_path);
+        }
+
+        return view('task_detail', compact('task', 'submission', 'submittedCode'));
     }
     
     public function downloadPdf(Task $task)
     {
-        if ($task->pdf_path) {
-            return Storage::download('public/' . $task->pdf_path);
+        $pdfPath = 'pdfs/' . $task->pdf_path;
+        if (Storage::disk('public')->exists($pdfPath)) {
+            return Storage::disk('public')->download($pdfPath);
         }
-        abort(404, 'PDF not found');
+        abort(404, 'PDF tidak ditemukan');
     }
     
 }

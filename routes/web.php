@@ -9,6 +9,8 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\StudentSubmissionController;
+use App\Models\Task;
+use Illuminate\Support\Facades\Storage;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -60,13 +62,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/task/{task}/download-pdf', [MaterialController::class, 'downloadPdf'])->name('task.download-pdf');
     Route::post('/student-submission', [StudentSubmissionController::class, 'store'])->name('student.submission.store');
     Route::get('/student-submission/{id}', [StudentSubmissionController::class, 'show'])->name('student.submission.show');
-    Route::get('/task/{task}/download-pdf', function (Task $task) {
-        $pdfPath = 'pdfs/' . $task->pdf_path;
-        if (Storage::disk('public')->exists($pdfPath)) {
-            return Storage::disk('public')->download($pdfPath);
-        }
-        abort(404, 'PDF tidak ditemukan');
-    })->name('task.download-pdf');
+    Route::get('/task/{task}/download-pdf', [MaterialController::class, 'downloadPdf'])->name('task.download-pdf');
     Route::post('/logoutt', [AuthController::class, 'logoutt'])->name('logoutt');
     
 });

@@ -17,7 +17,7 @@ class StudentSubmissionController extends Controller
         // $data = 
         $request->validate([
             'task_id' => 'required|exists:tasks,id',
-            'answer_file' => 'required|mimes:py,txt' // Validasi untuk file Python
+            'answer_file' => 'required|' // Validasi untuk file Python
         ], [
             'answer_file.required' => 'File Python harus diunggah.',
             'answer_file.file' => 'Unggahan harus berupa file.',
@@ -28,13 +28,13 @@ class StudentSubmissionController extends Controller
         // dd($data);
 
         $user = auth()->user();
-        
+
         // Generate nama file yang unik
         $fileName = $user->id . '_' . $request->task_id . '_' . time() . '.py';
-        
+
         // Simpan file dengan nama yang ditentukan
         $filePath = $request->file('answer_file')->storeAs('./public/submissions', $fileName, 'local');
-    
+
 
     // Tambahkan kode debugging di sini
         \Log::info('File uploaded: ' . $filePath);
@@ -69,7 +69,7 @@ class StudentSubmissionController extends Controller
 
         // Di sini Anda bisa menambahkan logika untuk menjalankan tes
         // dan menyimpan hasilnya ke $submission->test_result
-    
+
         return redirect()->back()->with('success', 'Submission berhasil.');
     }
 
