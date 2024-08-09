@@ -1,0 +1,68 @@
+
+// // // TERBARUUUU  NEW
+// <script>
+//     $(document).ready(function() {
+//         $('#submitButton').click(function(event) {
+//             event.preventDefault();
+
+//             const csrfToken = $('meta[name="csrf-token"]').attr('content');
+//             const resultsDiv = $('.texts');
+//             let resultData = {};
+
+//             // Membuat objek FormData untuk mengirim file
+//             var formData = new FormData();
+//             formData.append('file', $('#answer_file')[0].files[0]);
+//             formData.append('_token', csrfToken);
+
+//             $.ajax({
+//                 url: "http://localhost:8080/api/run-python",
+//                 type: "POST",
+//                 data: formData,
+//                 processData: false,  // Penting untuk mengirim FormData
+//                 contentType: false,  // Penting untuk mengirim FormData
+//                 beforeSend: function() {
+//                     $('#submitButton').hide();
+//                     $('#spinner').show();
+//                 },
+//                 success: function(data) {
+//                     $('#spinner').hide(); 
+//                     console.log(data);
+
+//                     resultsDiv.empty();
+
+//                     if (data.output) {
+//                         resultsDiv.append('<h2>Output:</h2><p>' + data.output + '</p>');
+//                     }
+
+//                     resultData = {
+//                         output: data.output || ''
+//                     };
+//                     console.log(resultData);
+
+//                     // Mengirim resultData ke controller Laravel
+//                     $.ajax({
+//                         url: "{{ route('store_python_result_data') }}",
+//                         type: "POST",
+//                         data: {
+//                             _token: csrfToken,
+//                             output: resultData.output,
+//                             task_id: {{ $task->id }}
+//                         },
+//                         success: function(response) {
+//                             console.log('Data berhasil dikirim ke server:', response);
+//                             window.location.reload(true);
+//                         },
+//                         error: function(jqXHR, textStatus, errorThrown) {
+//                             console.error('Error:', textStatus, errorThrown);
+//                             $('#message').text('An error occurred while submitting the request.');
+//                         }
+//                     });
+//                 },
+//                 error: function(jqXHR, textStatus, errorThrown) {
+//                     console.error('Error:', textStatus, errorThrown);
+//                     $('#message').text('An error occurred while submitting the request.');
+//                 }
+//             });
+//         });
+//     });
+// </script> 

@@ -12,7 +12,7 @@ use App\Http\Controllers\PHP\Student\StudikasusController;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Session;
-
+  
 Route::group(['middleware' => ['auth', 'student']], function() {
     Route::prefix('php')->group(function () {
        

@@ -349,7 +349,7 @@
                         @endforeach
                         </ul>
                     @endif
-
+                    <!-- <div class="container texts" style="padding-top: 36px; margin-right: 200px; margin-bottom: 80px"> -->
                     <div class="container" style="padding-top: 36px; margin-right: 200px; margin-bottom: 80px">
                         <h1>Task Submission</h1>
 
@@ -360,6 +360,7 @@
                                 <label for="answer_file">Upload your Python file:</label>
                                 <input type="file" name="answer_file" id="answer_file" required>
                             </div>
+                            <!-- <button class="button" type="button" id="submitButton">Submit</button> -->
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
 
@@ -390,11 +391,15 @@
             <span class="text-muted">© 2023 Your Website. All rights reserved.</span>
         </div>
     </footer>
+
+    
     <script>
     function goToTaskPage(taskId) {
         window.location.href = "/task/" + taskId;
     }
     </script>
+
+
 
     <script>
         function toggleSidebar() {
