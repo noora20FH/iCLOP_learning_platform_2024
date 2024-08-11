@@ -11,47 +11,6 @@ use Illuminate\Support\Facades\Storage;
 class StudentSubmissionController extends Controller
 {
     
-    // // public function sendUrl(Request $request)
-    // // {
-    // //     $fileURL = $request->input('url');
-    // //     // dd($fileURL);
-    // //     $response = Http::asForm()->timeout(200000000000)->post('http://localhost:8080/api/run-python', [
-    // //         'url' => $fileURL
-    // //     ]);
-
-    // //     if ($response) {
-    // //         $data = $response->json();
-    // //         // Return the data as JSON
-    // //         return response()->json($data);
-    // //     } else {
-    // //         return response()->json(['message' => 'An errorcukihile submitting the request.'], 500);
-    // //     }
-    // // }
-
-    // //NEW UPDATED
-    // public function sendUrl(Request $request)
-    // {
-    //     $file = $request->file('file');
-    //     $taskId = $request->input('task_id');
-    
-    //     if (!$file) {
-    //         return response()->json(['message' => 'No file uploaded.'], 400);
-    //     }
-    
-    //     $response = Http::attach(
-    //         'file', file_get_contents($file), $file->getClientOriginalName()
-    //     )->post('http://localhost:8080/api/run-python', [
-    //         'task_id' => $taskId
-    //     ]);
-    
-    //     if ($response->successful()) {
-    //         $data = $response->json();
-    //         return response()->json($data);
-    //     } else {
-    //         return response()->json(['message' => 'An error occurred while submitting the request.'], 500);
-    //     }
-    // }
-
     public function store(Request $request)
     {
 
@@ -59,24 +18,28 @@ class StudentSubmissionController extends Controller
         // $data = 
         $request->validate([
             'task_id' => 'required|exists:tasks,id',
-            'answer_file' => 'required|' // Validasi untuk file Python
-        ], [
-            'answer_file.required' => 'File Python harus diunggah.',
-            'answer_file.file' => 'Unggahan harus berupa file.',
-            'answer_file.mimes' => 'File harus berekstensi .py (Python).',
-            'answer_file.max' => 'Ukuran file tidak boleh lebih dari 2MB.'
+            'answer_file' => 'required|file|mimes:txt,py' // Validasi untuk file Python
         ]);
 
         // dd($data);
 
         $user = auth()->user();
-
-        // Generate nama file yang unik
-        $fileName = $user->id . '_' . $request->task_id . '_' . time() . '.py';
+        $task = Task::findOrFail($request->task_id);
+        $uploadedFile = $request->file('answer_file');
+        $expectedFileName = $this->getExpectedFileName($task);
 
         // Simpan file dengan nama yang ditentukan
-        $filePath = $request->file('answer_file')->storeAs('./public/submissions', $fileName, 'local');
-
+        $filePath = $uploadedFile ->storeAs('./public/submissions', $expectedFileName, 'local');
+        
+        //Menambahkan validasi nama file sebelum menyimpan file:
+        if (!$this->isFileNameValid($uploadedFile->getClientOriginalName(), $expectedFileName)) {
+            return redirect()->back()->with('error', 'Nama file tidak sesuai. Harap gunakan format: ' . $expectedFileName);
+        }
+        
+        
+        // Log untuk memastikan file tersimpan dengan benar
+        \Log::info('File saved at: ' . $filePath);
+        \Log::info('File content after save: ' . Storage::disk('public')->get($filePath));
 
     // Tambahkan kode debugging di sini
         \Log::info('File uploaded: ' . $filePath);
@@ -86,11 +49,11 @@ class StudentSubmissionController extends Controller
             \Log::error('File not found at: ' . Storage::disk('local')->path($filePath));
         }
 
+
         $task = Task::findOrFail($request->task_id);
         $existingSubmission = StudentSubmission::where('user_id', $user->id)
                                                ->where('task_id', $task->id)
                                                ->first();
-
         if ($existingSubmission) {
             // Jika sudah ada, update submission yang ada
             $submissionCount = $existingSubmission->submission_count + 1;
@@ -115,7 +78,30 @@ class StudentSubmissionController extends Controller
         return redirect()->back()->with('success', 'Submission berhasil.');
     }
     // }
+    private function getExpectedFileName(Task $task)
+    { // mengekstrak nama file pdf dan merubah namanya menjadi answer_{path}.py
+        // untuk pathnya adalah path dari bab dan percobaan nya
+        // misalnya jika pathnya adalah bab1_Percobaan1 maka nama file nya akan answer_bab1_Percobaan1.py
+        // dari hasil ini kemudian akan jadi pembanding untuk nama file yang diupload
 
+        // Ambil nama file PDF dari kolom pdf_path pada tabel tasks
+        $pdfPath = $task->pdf_path;
+
+        // Ekstrak nama file dari path
+        $pdfFileName = basename($pdfPath);
+
+        // Ekstrak bagian yang diperlukan (misalnya 'bab1_Percobaan1')
+        preg_match('/bab\d+_Percobaan\d+/i', $pdfFileName, $matches);
+        $extractedPart = $matches[0] ?? '';
+
+        // Buat nama file yang diharapkan
+        return 'answer_' . strtolower($extractedPart) . '.py';
+    }
+
+    private function isFileNameValid($uploadedFileName, $expectedFileName)
+    {
+        return strtolower($uploadedFileName) === strtolower($expectedFileName);
+    }
 
     // public function storeTestResult(Request $request)
     // {
@@ -151,12 +137,12 @@ class StudentSubmissionController extends Controller
     //         }
     //     }
 
-    public function show($id)
-    {
-        $submission = StudentSubmission::findOrFail($id);
-        $task = Task::findOrFail($id);
-        return view('task_detail', compact('submission','task'));
-    }
+//   public function show($id)
+//     {
+//         $submission = StudentSubmission::findOrFail($id);
+//         $task = Task::findOrFail($id);
+//         return view('task_detail', compact('submission','task'));
+//     }
 
     private function runTest(StudentSubmission $submission)
     {

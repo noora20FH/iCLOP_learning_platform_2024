@@ -19,4 +19,9 @@ class Task extends Model
     {
         return $this->belongsTo(Material::class);
     }
+        // Tambahkan relasi ini
+    public function studentSubmissions()
+    {
+        return $this->hasMany(StudentSubmission::class);
+    }
 }

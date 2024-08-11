@@ -249,7 +249,7 @@
                             <div class="col">
                                 <p class="text">
                                     @php
-                                        $fileName = pathinfo($task->pdf_path, PATHINFO_FILENAME);
+                                        $fileName = pathinfo($materialTask->pdf_path, PATHINFO_FILENAME);
                                         $displayName = str_replace('Data_analitik_', '', $fileName);
                                         $displayName = ucfirst(str_replace('_', ' ', $displayName));
                                     @endphp
@@ -259,7 +259,7 @@
                         </div>
                         @endforeach
                     @else
-                        <p>No tasks available for this material.</p>
+                        <p>Tidak ada tugas tersedia untuk materi ini.</p>
                     @endif
                 </div>
             </div>
@@ -353,6 +353,18 @@
                     <div class="container" style="padding-top: 36px; margin-right: 200px; margin-bottom: 80px">
                         <h1>Task Submission</h1>
 
+                        @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
+                        @if(session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
                         <form action="{{ route('student.submission.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="task_id" value="{{ $task->id }}">
@@ -370,7 +382,6 @@
                             <h3>Test Results:</h3>
                             <pre>{{ $submission->test_result }}</pre>
                         @endif
-
                         @if(isset($submission) && $submission->file_path)
                             <h3>Kode yang Disubmit:</h3>
                             <pre><code>{{ $submittedCode }}</code></pre>
