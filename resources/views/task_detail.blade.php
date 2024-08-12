@@ -16,6 +16,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>iCLOP</title>
     <link rel="icon" href="./images/logo.png" type="image/png">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         html, body {
             height: 100%;
@@ -365,15 +366,16 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('student.submission.store') }}" method="POST" enctype="multipart/form-data">
+                        <!-- <form action="{{ route('student.submission.store') }}" method="POST" enctype="multipart/form-data"> -->
+                        <form>
                             @csrf
                             <input type="hidden" name="task_id" value="{{ $task->id }}">
                             <div class="form-group">
-                                <label for="answer_file">Upload your Python file:</label>
-                                <input type="file" name="answer_file" id="answer_file" required>
+                                <label for="file">Upload your Python file:</label>
+                                <input type="file" name="file" id="file" required>
                             </div>
-                            <!-- <button class="button" type="button" id="submitButton">Submit</button> -->
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button class="button" type="btn btn-primary" id="submitButton">Submit</button>
+                            <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
                         </form>
 
                         @if(isset($submission))
@@ -472,6 +474,95 @@
             });
         }
     </script>
+    
+<!-- // // TERBARUUUU  NEW -->
+<script>
+    $(document).ready(function() {
+        $('#submitButton').click(function(event) {
+            event.preventDefault();
+
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
+            const resultsDiv = $('.texts');
+            let resultData = {};
+
+            // Membuat objek FormData untuk mengirim file
+            var formData = new FormData();
+            formData.append('file', $('#file')[0].files[0]);
+            formData.append('_token', csrfToken);
+            formData.append('task_id', {{ $task->id }});
+
+            $.ajax({
+                url: "http://127.0.0.1:8080/api/run-python",
+                type: "POST",
+                data: formData,
+                
+                processData: false,  // Penting untuk mengirim FormData
+                contentType: false,  // Penting untuk mengirim FormData
+                beforeSend: function() {
+                   
+                    $('#submitButton').hide();
+                    $('#spinner').show();
+                    $.ajax({
+                        url: "{{ route('student.submission.store') }}",
+                        type: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            console.log('Data berhasil dikirim ke server:', response);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log('Error route(student.submission.store):', textStatus, errorThrown);
+                            $('#message').text('An error occurred while submitting the request.');
+                        }
+                    });
+                },
+                success: function(data) {
+                    $('#spinner').hide();
+                    console.log(data);
+
+                    resultsDiv.empty();
+
+                    if (data.output) {
+                        resultsDiv.append('<h2>Output:</h2><p>' + data.output + '</p>');
+                    }
+
+                    resultData = {
+                        output: data.output || ''
+                    };
+                    console.log(resultData);
+                    // Mengirim resultData ke controller Laravel
+                    $.ajax({
+                        url: "{{ route('store_python_result_data') }}",
+                        type: "POST",
+                        
+                        data: {
+                            _token: csrfToken,
+                            output: resultData.output,
+                            task_id: {{ $task->id }}
+                        },
+                        beforeSend: function() {
+                          console.log(csrfToken);
+                        },
+                        success: function(response) {
+                            console.log('Data berhasil dikirim ke server:', response);
+                            window.location.reload(true);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log('Error route(store_python_result_data) :', textStatus, errorThrown);
+                            $('#message').text('An error occurred while submitting the request.');
+                        }
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error', textStatus, errorThrown);
+                    $('#message').text('An error occurred while submitting the request.');
+                }
+            });
+        });
+    });
+</script> 
+    
 </body>
 
 </html>

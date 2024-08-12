@@ -18,14 +18,14 @@ class StudentSubmissionController extends Controller
         // $data = 
         $request->validate([
             'task_id' => 'required|exists:tasks,id',
-            'answer_file' => 'required|file|mimes:txt,py' // Validasi untuk file Python
+            'file' => 'required|file|mimes:txt,py' // Validasi untuk file Python
         ]);
 
         // dd($data);
 
         $user = auth()->user();
         $task = Task::findOrFail($request->task_id);
-        $uploadedFile = $request->file('answer_file');
+        $uploadedFile = $request->file('file');
         $expectedFileName = $this->getExpectedFileName($task);
 
         // Simpan file dengan nama yang ditentukan
@@ -75,7 +75,7 @@ class StudentSubmissionController extends Controller
         // Di sini Anda bisa menambahkan logika untuk menjalankan tes
         // dan menyimpan hasilnya ke $submission->test_result
 
-        return redirect()->back()->with('success', 'Submission berhasil.');
+        // return redirect()->back()->with('success', 'Submission berhasil.');
     }
     // }
     private function getExpectedFileName(Task $task)
@@ -103,39 +103,39 @@ class StudentSubmissionController extends Controller
         return strtolower($uploadedFileName) === strtolower($expectedFileName);
     }
 
-    // public function storeTestResult(Request $request)
-    // {
-    //     // Validasi request jika diperlukan
-    //     $request->validate([
-    //         'output' => 'required|string',
-    //         'task_id' => 'required|exists:tasks,id',
-    //     ]);
+    public function storeTestResult(Request $request)
+    {
+        // Validasi request jika diperlukan
+        $request->validate([
+            'output' => 'required|string',
+            'task_id' => 'required|exists:tasks,id',
+        ]);
 
-    //     // Mendapatkan pengguna yang sedang login
-    //     $user_id = auth()->user()->id;
+        // Mendapatkan pengguna yang sedang login
+        $user_id = auth()->user()->id;
 
-    //     // Mendapatkan data dari request
-    //     $output = $request->input('output');
-    //     $task_id = $request->input('task_id');
+        // Mendapatkan data dari request
+        $output = $request->input('output');
+        $task_id = $request->input('task_id');
 
-    //     // Mencari submission yang sesuai
-    //     $submission = StudentSubmission::where('user_id', $user_id)
-    //                                 ->where('task_id', $task_id)
-    //                                 ->first();
+        // Mencari submission yang sesuai
+        $submission = StudentSubmission::where('user_id', $user_id)
+                                    ->where('task_id', $task_id)
+                                    ->first();
 
-    //     if ($submission) {
-    //         // Update kolom test_result dengan data output
-    //         $submission->update([
-    //             'test_result' => $output,
-    //         ]);
+        if ($submission) {
+            // Update kolom test_result dengan data output
+            $submission->update([
+                'test_result' => $output,
+            ]);
 
-    //         // Mengembalikan respons sukses
-    //         return response()->json(['message' => 'Data berhasil disimpan.', 'data' => $submission]);
-    //     } else {
-    //         // Jika submission tidak ditemukan, kembalikan respons error
-    //         return response()->json(['message' => 'Submission tidak ditemukan.'], 404);
-    //         }
-    //     }
+            // Mengembalikan respons sukses
+            return response()->json(['message' => 'Data berhasil disimpan.', 'data' => $submission]);
+        } else {
+            // Jika submission tidak ditemukan, kembalikan respons error
+            return response()->json(['message' => 'Submission tidak ditemukan.'], 404);
+            }
+        }
 
 //   public function show($id)
 //     {

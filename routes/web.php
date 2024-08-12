@@ -64,9 +64,9 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/student-submission/{id}', [StudentSubmissionController::class, 'show'])->name('student.submission.show');
     // Route::get('/submissions/{id}', [StudentSubmissionController::class, 'show'])->name('submissions.show');
     Route::get('/task/{task}/download-pdf', [MaterialController::class, 'downloadPdf'])->name('task.download-pdf');
-    Route::post('/store-python-result-data', [StudentSubmissionController::class, 'storeTestResult'])->name('store_python_result_data');
     Route::post('/logoutt', [AuthController::class, 'logoutt'])->name('logoutt');
     
+    Route::post('/store-python-result-data', [StudentSubmissionController::class, 'storeTestResult'])->name('store_python_result_data');
 });
 
 // Route Node JS
