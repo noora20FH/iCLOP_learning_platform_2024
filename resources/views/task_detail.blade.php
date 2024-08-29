@@ -498,7 +498,7 @@
                 
                 processData: false,  // Penting untuk mengirim FormData
                 contentType: false,  // Penting untuk mengirim FormData
-                beforeSend: function() {
+                                                                                                beforeSend: function() {
                    
                     $('#submitButton').hide();
                     $('#spinner').show();
