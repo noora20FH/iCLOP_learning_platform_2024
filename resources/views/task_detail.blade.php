@@ -352,7 +352,7 @@
                     @endif
                     <!-- <div class="container texts" style="padding-top: 36px; margin-right: 200px; margin-bottom: 80px"> -->
                     <div class="container" style="padding-top: 36px; margin-right: 200px; margin-bottom: 80px">
-                        <h1>Task Submission</h1>
+                        <h3>Task Submission</h3>
 
                         @if(session('error'))
                             <div class="alert alert-danger">
@@ -379,13 +379,13 @@
                         </form>
 
                         @if(isset($submission))
-                            <h2>Submission Details</h2>
-                            <p>Submission Count: {{ $submission->submission_count }}</p>
+                            <!-- <h3>Submission Details</h3> -->
+                            <p><b>Submission Count: {{ $submission->submission_count }}</b></p>
                             <h3>Test Results:</h3>
                             <pre>{{ $submission->test_result }}</pre>
                         @endif
                         @if(isset($submission) && $submission->file_path)
-                            <h3>Kode yang Disubmit:</h3>
+                            <h3>Code Display:</h3>
                             <pre><code>{{ $submittedCode }}</code></pre>
                         @else
                             <p>Belum ada submission untuk tugas ini.</p>

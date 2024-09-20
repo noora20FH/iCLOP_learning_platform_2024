@@ -91,7 +91,7 @@ class StudentSubmissionController extends Controller
         $pdfFileName = basename($pdfPath);
 
         // Ekstrak bagian yang diperlukan (misalnya 'bab1_Percobaan1')
-        preg_match('/bab\d+_Percobaan\d+/i', $pdfFileName, $matches);
+        preg_match('/chapter\d+_Experiments\d+/i', $pdfFileName, $matches);
         $extractedPart = $matches[0] ?? '';
 
         // Buat nama file yang diharapkan
