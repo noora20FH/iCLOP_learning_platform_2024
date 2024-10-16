@@ -188,7 +188,7 @@
         </div>
         <div class="progress-text" id="progressText">0%</div>
         <ul class="list">
-            <li class="list-item" onclick="toggleItem(this)">
+            <!-- <li class="list-item" onclick="toggleItem(this)">
                 <img class="list-item-icon" src="{{ asset('images/down-arrow.png') }}" style="height: 24px">
                 <span class="list-item-title">Start to learn Data Analytics with Python</span>
             </li>
@@ -231,7 +231,7 @@
 
                 </div>
 
-            </div>
+            </div> -->
 
             <li class="list-item" onclick="toggleItem(this)">
                 <img class="list-item-icon" src="{{ asset('images/down-arrow.png') }}" style="height: 24px">
@@ -265,7 +265,7 @@
                 </div>
             </div>
 
-            <li class="list-item" onclick="toggleItem(this)">
+            <!-- <li class="list-item" onclick="toggleItem(this)">
                <img class="list-item-icon" src="{{ asset('images/down-arrow.png') }}" style="height: 24px">
                 <span class="list-item-title">Assignment Answer Submission</span>
             </li>
@@ -306,7 +306,7 @@
                     </div>
 
                 </div>
-            </div>
+            </div> -->
         </ul>
     </div>
 
