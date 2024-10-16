@@ -388,7 +388,7 @@
                             <h3>Code Display:</h3>
                             <pre><code>{{ $submittedCode }}</code></pre>
                         @else
-                            <p>Belum ada submission untuk tugas ini.</p>
+                            <p>There are no submissions for this assignment yet.</p>
                         @endif
                     </div>
                 </div>
