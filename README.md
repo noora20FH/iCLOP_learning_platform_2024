@@ -26,8 +26,8 @@ Bahasa Pemrograman: HTML, CSS, JavaScript, PHP
 
 ## Notes:
 
-php version ^8.0
-install composer
+- php version ^8.0
+- install composer
 
 install libraries:
 - numpy: pip install numpy
