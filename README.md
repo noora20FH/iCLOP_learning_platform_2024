@@ -1,1 +1,1 @@
-# iclop_data_analytics
+# iCLOP Learning Platform 2024
