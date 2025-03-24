@@ -2,26 +2,25 @@
 
 ## iCLOP Learning Platform 2024
 
-Proyek ini menekankan pada pengembangan full-stack, menggabungkan keahlian dalam pengujian Python, pengembangan backend dengan Laravel, dan pengembangan frontend untuk menciptakan sistem pembelajaran yang efektif dan mudah digunakan.
+This project emphasizes full-stack development, combining expertise in Python testing, backend development with Laravel, and frontend development to create an effective and user-friendly learning system.
 
-## Kontribusi
+## Contributions
+- Developing and maintaining an automated testing framework using Python to validate code and learning materials.
 
-- Mengembangkan dan memelihara kerangka kerja pengujian otomatis menggunakan Python untuk memvalidasi kode dan materi pembelajaran.
+- Integrating this testing framework with the Laravel backend of the iCLOP platform.
 
-- Mengintegrasikan kerangka kerja pengujian ini dengan backend Laravel platform iCLOP.
-- Merancang dan mengembangkan antarmuka pengguna (halaman user) untuk pengalaman pembelajaran yang optimal, termasuk:
+- Designing and developing the user interface (user pages) for an optimal learning experience, including:
 
-    - Halaman Pembelajaran Data Analytics with Python
-    - Halaman Detail Materi
+    - Data Analytics with Python Learning Page
 
-- Membangun API untuk menghubungkan kerangka kerja pengujian Python dengan framework Spring Boot, yang digunakan dalam proses validasi kode Python.
+    - Detailed Material Page
 
+- Building an API to connect the Python testing framework with the Spring Boot framework, used in the Python code validation process.
 
-## Teknologi yang Digunakan:
+## Technologies Used:
+- Frameworks: Laravel, Bootstrap
 
-Framework: Laravel, Bootstrap
-
-Bahasa Pemrograman: HTML, CSS, JavaScript, PHP
+- Programming Languages: HTML, CSS, JavaScript, PHP
 
 
 ## Notes:
