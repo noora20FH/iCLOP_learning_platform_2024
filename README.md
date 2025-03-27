@@ -28,9 +28,9 @@ This project emphasizes full-stack development, combining expertise in Python te
 - php version ^8.0
 - install composer
 - check session path:
-      - .env
-      - SESSION_FILES_PATH=E:\00_Skripsi_2023_2024\iCLOP_learning_platform_2024\iCLOP_learning_platform_2024\storage\framework\sessions
-      - save the configuration: php artisan config:clear 
+    - .env
+    - SESSION_FILES_PATH=E:\00_Skripsi_2023_2024\iCLOP_learning_platform_2024\iCLOP_learning_platform_2024\storage\framework\sessions
+    - save the configuration: php artisan config:clear
 
 install libraries in the TestPython directory:
 - numpy: pip install numpy
