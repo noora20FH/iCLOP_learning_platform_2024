@@ -9,7 +9,7 @@ import pandas as pd
 
 # Update paths and filename
 path_answer = "/content/"  # changed
-filename = "answer_bab1_percobaan1.py"  # changed
+filename = "answer_chapter1_experiments1.py"  # changed
 
 
 # Import the answer module
